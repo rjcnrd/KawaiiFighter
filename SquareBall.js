@@ -2,7 +2,7 @@
 // Square Ball has to be kept inside the playing field or Kawaii Fighter loses one Life 
 // Square Ball 
 
-function SquareBall (startX = 0,startY = 0,side=10,color = "#7FFFD4", startVX = 0,startVY = 0,ctx) 
+function SquareBall (startX = 0,startY = 0,startVX = 0,startVY = 0,side=10,color = "#7FFFD4",ctx) 
 {  
   this.side = side;
   this.x = startX;
@@ -23,28 +23,32 @@ SquareBall.prototype.draw = function (ctx) {
   this.ctx.restore();
   }
   
-// SquAREBall.prototype.changePosition = function () {
-//     this.x += this.vx; 
-//     this.y += this.vy;
+
+//Change position moves around the ball 
+
+SquareBall.prototype.changePosition = function (playingField) {
+    this.x += this.vx; 
+    this.y += this.vy;
+  //reflect on right border
+    if(this.x >playingField.xMax-this.side){
+      console.log("touched right",this.x);
+      this.x = playingField.xMax - this.side;
+      this.vx *=-1;
+    };
+  //Reflect on left border
+
+    if(this.x <playingField.xMin){
+      this.x = this.side;
+      console.log("touched left",this.x);
+      this.vx *= -1;
+    };
+
+    //reflect on top border 
   
-//     if(this.x >this.width-this.radius){
-//       this.x = this.width - this.radius;
-//       this.vx *=-1;
-//     };
+    if(this.y === playingField.yMax){
+      this.y = playingField.yMax;
+      console.log("touched top",this.y);
+      this.vy *= -1;
+    };
   
-//     if(this.x <this.radius){
-//       this.x = this.radius;
-//       this.vx *= -1;
-//     };
-  
-//     if(this.y < this.radius){
-//       this.y = this.radius;
-//       this.vy *= -1;
-//     };
-    
-//     if(this.y > this.height - this.radius){
-//       this.y = this.height - this.radius;
-//       this.vy *= -1;
-//     };
-  
-//   }
+  }

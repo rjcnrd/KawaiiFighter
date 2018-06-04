@@ -1,6 +1,15 @@
 
 var ctx = document.getElementById("canvas").getContext("2d");
 
+
+//playingfield saves the maximum coordinates that objects can have without touching the game border. 
+var playingField = {
+  xMax: 948, //xmax Furthest most that objects can be without touching the frame
+  xMin:  52, //xmin
+  yMax: 50, //ymax
+  yMin: 540,//ymin
+};
+
 var width =  1000;
 var height = 600;
 var background1 = new Image;
@@ -29,8 +38,8 @@ function drawBorder(){
 }
 
 
-fighter = new Fighter(430,500,0,0,0,0,"white",ctx);
-squareBall = new SquareBall(430,300,50,"#7FFFD4", 0,0,ctx) 
+fighter = new Fighter(430,500,60,60,0,0,"white",ctx);
+squareBall = new SquareBall(250,250,40,-10,40,"#7FFFD4",ctx);
 
 setInterval(function()
 {
@@ -40,20 +49,20 @@ setInterval(function()
   drawBorder();
   fighter.draw(ctx);
   squareBall.draw(ctx);
+  squareBall.changePosition(playingField);
   ctx.save();
-},1000/60)
+},1000/10)
 
 //fighter animation
-
 
 document.onkeydown = function(e) {
   switch (e.keyCode) {
     case 39:
-      fighter.moveRight();
+      fighter.moveRight(playingField);
       console.log("movedright");
       break;
     case 37:
-      fighter.moveLeft();
+      fighter.moveLeft(playingField);
       console.log("moved left");
       break;
   }

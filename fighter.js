@@ -6,8 +6,8 @@ function Fighter (x=430,y=500,vx=0,vy=0,ax=0,ay=0,color="white",ctx) {
   this.ax = ax;
   this.ay = ay;
   this.color= color;
-  this.height= 40;
-  this.width= 140;
+  this.height= 40; //height of player
+  this.width= 140; //widt of player
   this.ctx = ctx;
 }
 
@@ -18,7 +18,7 @@ function Fighter (x=430,y=500,vx=0,vy=0,ax=0,ay=0,color="white",ctx) {
 // vy : velocity on y axis
 
 
-Fighter.prototype.draw = function (ctx) {
+Fighter.prototype.draw = function () {
   this.ctx.save();
   this.ctx.beginPath();
   this.ctx.rect(this.x,this.y,this.width,this.height);
@@ -30,14 +30,20 @@ Fighter.prototype.draw = function (ctx) {
 
 //move functions for right or left arrow 
 
-Fighter.prototype.moveRight = function () {
-  if(this.x<790)this.x +=60;
-  else this.x = 805;
-  console.log(this.x, "x");
+Fighter.prototype.moveRight = function (playingField) 
+  {
+  if (playingField.xMax-(this.x + this.width)<=this.vx)
+    {
+    this.x = playingField.xMax - this.width
+    }
+    else this.x +=this.vx;
   }
 
-Fighter.prototype.moveLeft = function () {
-    if (this.x> 70) this.x -=60;
-    else this.x = 54;
+Fighter.prototype.moveLeft = function (playingField) {
+    if (this.x - playingField.xMin < this.vx)
+      {
+        this.x = playingField.xMin;
+      }
+    else this.x -= this.vx;
     console.log(this.x, "x");
     }
