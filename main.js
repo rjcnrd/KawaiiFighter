@@ -28,18 +28,33 @@ var frames = 0;
 function drawBorder(){
 
   //temporary
-  ctx.drawImage(background1,0,0);
+  //ctx.drawImage(background1,0,0);
   
-  // var lessFrames = Math.floor(frames%10/6); // gives 0 or 1
-  // console.log("frames",frames,"lessFrames",lessFrames)
-  // if (lessFrames == 0) {
-  //   ctx.drawImage(background1,0,0);
-  // } else {ctx.drawImage(background2,0,0);}
+  var lessFrames = Math.floor(frames%10/6); // gives 0 or 1
+  console.log("frames",frames,"lessFrames",lessFrames)
+  if (lessFrames == 0) {
+    ctx.drawImage(background1,0,0);
+  } else {ctx.drawImage(background2,0,0);}
 }
 
-
 fighter = new Fighter(430,500,60,60,0,0,"white",ctx);
-squareBall = new SquareBall(250,250,40,-10,40,"#7FFFD4",ctx);
+squareBall = new SquareBall(250,250,4,-1,40,"#7FFFD4",ctx);
+
+//Check if fighter and squareBall meet 
+
+function checkCollission1() {
+  var yCollission = squareBall.y+squareBall.side >= (playingField.yMin-fighter.height);
+  var xCollissionA = (squareBall.x + squareBall.side >= fighter.x);
+  var xCollissionB = squareBall.x <= (fighter.x + fighter.width);
+  if (yCollission === true) {console.log("The ball is too low",yCollission);}
+  if (xCollissionA && xCollissionB) {console.log("The ball is in the zone of the fighter");}
+  // if (xCollission === true) {console.log("The ball is passings the fighter")};
+  if (xCollissionA && xCollissionB && yCollission){console.log("touching ball");
+    {squareBall.vy *= -1};
+};
+// if ( && ()
+//   {console.log("I touched the bar!!")};
+};
 
 setInterval(function()
 {
@@ -47,11 +62,12 @@ setInterval(function()
   ctx.save(); 
   frames++;
   drawBorder();
+  checkCollission1();
   fighter.draw(ctx);
   squareBall.draw(ctx);
   squareBall.changePosition(playingField);
   ctx.save();
-},1000/10)
+},1000/60)
 
 //fighter animation
 

@@ -11,6 +11,7 @@ function SquareBall (startX = 0,startY = 0,startVX = 0,startVY = 0,side=10,color
   this.vy = startVY;
   this.color = color;
   this.ctx = ctx; 
+  this.status = "bouncing"; //change status to lost if ball is lost by player (disappearing to y axis)
 }
 
 SquareBall.prototype.draw = function (ctx) {
@@ -30,16 +31,16 @@ SquareBall.prototype.changePosition = function (playingField) {
     this.x += this.vx; 
     this.y += this.vy;
   //reflect on right border
-    if(this.x >playingField.xMax-this.side){
-      console.log("touched right",this.x);
+    if(this.x >= playingField.xMax-this.side){
+      // console.log("touched right",this.x);
       this.x = playingField.xMax - this.side;
       this.vx *=-1;
     };
   //Reflect on left border
 
-    if(this.x <playingField.xMin){
-      this.x = this.side;
-      console.log("touched left",this.x);
+    if(this.x <=playingField.xMin){
+      this.x = playingField.xMin+1;
+      // console.log("touched left",this.x);
       this.vx *= -1;
     };
 
