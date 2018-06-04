@@ -28,8 +28,16 @@ Fighter.prototype.draw = function (ctx) {
   this.ctx.restore();
   }
 
+//move functions for right or left arrow 
 
-
-Fighter.prototype.move = function (vx) {
-  this.x =+ vx;
+Fighter.prototype.moveRight = function () {
+  if(this.x<790)this.x +=60;
+  else this.x = 805;
+  console.log(this.x, "x");
   }
+
+Fighter.prototype.moveLeft = function () {
+    if (this.x> 70) this.x -=60;
+    else this.x = 54;
+    console.log(this.x, "x");
+    }
