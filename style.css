@@ -1,0 +1,12 @@
+body {background:black;}
+
+#canvas {
+  /* border: 1px solid pink; */
+  width:100%;
+}
+
+.flex {
+  display:flex;
+  align-items:center;
+  height:100vh;
+}
