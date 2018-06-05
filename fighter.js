@@ -50,8 +50,10 @@ Fighter.prototype.moveLeft = function (playingField) {
     };
 
 Fighter.prototype.createBullets = function () {
-  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10,-10,-10,"#88fafc",this.ctx,10,10));
-  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10,0,-10,"#93aeff",this.ctx,10,10));
-  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10  ,10,-10,"#6e64ef",this.ctx,10,10));
+  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10,-10,-10,"#88fafc",this.ctx,10,10,5));
+  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10,-5,-10,"#6e64ef",this.ctx,10,10,5));
+  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10,0,-10,"#93aeff",this.ctx,10,10,5));
+  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10,5,-10,"#6e64ef",this.ctx,10,10,5));
+  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10  ,10,-10,"#88fafc",this.ctx,10,10,5));
   console.log("allBullets",allBullets);
 }

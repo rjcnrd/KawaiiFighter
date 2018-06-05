@@ -61,12 +61,12 @@ SquareBall.prototype.changePosition = function (playingField,canvas,fighter) {
       fighter.lives -= 1;
       //shoot the ball back in if the fighter is still living! 
       if(fighter.lives>0){
-        var randomVx =  Math.floor(Math.random()*11)-10; //random start speed for the ball
-        var randomVy =  Math.floor(Math.random()*11)-10; //random start speed for the ball  
-        this.color = "yellow";
+        var randomVx =  Math.floor(Math.random()*21)-10; //random start speed for the ball
+        var randomVy =  Math.floor(Math.random()*21)-10; //random start speed for the ball  
+        // this.color = ;
         this.x = playingField.xMax/2;
         this.y = (playingField.yMin-playingField.yMax)/2;     
-        this.vx =5;
+        this.vx = 5;
         this.vy = 5;
       }
       console.log("fighter.live",fighter.lives);

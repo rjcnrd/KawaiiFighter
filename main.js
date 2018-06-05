@@ -133,7 +133,7 @@ setInterval(function()
   
 
   ctx.save();
-},1000/20);
+},1000/60);
 
 //fighter animation
 
