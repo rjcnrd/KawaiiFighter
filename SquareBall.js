@@ -11,8 +11,9 @@ function SquareBall (startX = 0,startY = 0,startVX = 0,startVY = 0,side=10,color
   this.vy = startVY;
   this.color = color;
   this.ctx = ctx; 
-  this.status = "bouncing"; //change status to lost if ball is lost by player (disappearing to y axis)
 }
+
+//draw()
 
 SquareBall.prototype.draw = function (ctx) {
   this.ctx.save();
@@ -23,11 +24,13 @@ SquareBall.prototype.draw = function (ctx) {
   this.ctx.closePath();
   this.ctx.restore();
   }
+
   
 
-//Change position moves around the ball 
+//Change position  reflects ball on left,right, and top border and changes the ball status if 
+// the ball is lost. 
 
-SquareBall.prototype.changePosition = function (playingField) {
+SquareBall.prototype.changePosition = function (playingField,canvas,fighter) {
     this.x += this.vx; 
     this.y += this.vy;
   //reflect on right border
@@ -48,8 +51,25 @@ SquareBall.prototype.changePosition = function (playingField) {
   
     if(this.y === playingField.yMax){
       this.y = playingField.yMax;
-      console.log("touched top",this.y);
+      // console.log("touched top",this.y);
       this.vy *= -1;
     };
+
+    //check if ball is lost
+
+    if(this.y > document.getElementById("canvas").height){
+      fighter.lives -= 1;
+      //shoot the ball back in if the fighter is still living! 
+      if(fighter.lives>0){
+        var randomVx =  Math.floor(Math.random()*11)-10; //random start speed for the ball
+        var randomVy =  Math.floor(Math.random()*11)-10; //random start speed for the ball  
+        this.color = "yellow";
+        this.x = playingField.xMax/2;
+        this.y = (playingField.yMin-playingField.yMax)/2;     
+        this.vx =5;
+        this.vy = 5;
+      }
+      console.log("fighter.live",fighter.lives);
+    }
   
   }

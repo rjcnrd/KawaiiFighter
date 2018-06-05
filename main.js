@@ -1,6 +1,9 @@
+//VARIABLES DEFINED FOR WHOLE GAME
+//.................................
+//.................................
 
+var canvas = document.getElementById("canvas");
 var ctx = document.getElementById("canvas").getContext("2d");
-
 
 //playingfield saves the maximum coordinates that objects can have without touching the game border. 
 var playingField = {
@@ -12,62 +15,125 @@ var playingField = {
 
 var width =  1000;
 var height = 600;
+var frames = 0;  //Frames is counting the amount of time the canvas was redrawn
+
+
+//IMAGES
+//.................................
+//.................................
+
 var background1 = new Image;
-var background2 = new Image; 
 background1.src = "images/background-1.png";
+var background2 = new Image; 
 background2.src = "images/background-2.png";
-var drawBackground1; 
 
-//background animation
-//Frames is counting the amount of time the canvas was redrawn
+var heart = new Image;
+heart.src = "images/Heart-Pink.png";
 
-var frames = 0; 
-
-//draw border changes the background border every tenth frame (6 times in 60 frames)
+//drawBorder() changes the background border every tenth frame (6 times in 60 frames)
 
 function drawBorder(){
-
-  //temporary
-  //ctx.drawImage(background1,0,0);
-  
   var lessFrames = Math.floor(frames%10/6); // gives 0 or 1
-  console.log("frames",frames,"lessFrames",lessFrames)
   if (lessFrames == 0) {
     ctx.drawImage(background1,0,0);
   } else {ctx.drawImage(background2,0,0);}
 }
 
-fighter = new Fighter(430,500,60,60,0,0,"white",ctx);
-squareBall = new SquareBall(250,250,4,-1,40,"#7FFFD4",ctx);
+function drawBullets(){
+  for (var i = 0; i < allBullets.length; i++) {
+    allBullets[i].draw();
+    console.log("draw bullets");
+   
+  }
+  
+}
 
-//Check if fighter and squareBall meet 
+function moveBullets(){
+  for (var i = 0; i < allBullets.length; i++) {
+    allBullets[i].changePosition();
+    console.log("changing position of bullets");
+  }
+}
 
-function checkCollission1() {
-  var yCollission = squareBall.y+squareBall.side >= (playingField.yMin-fighter.height);
-  var xCollissionA = (squareBall.x + squareBall.side >= fighter.x);
-  var xCollissionB = squareBall.x <= (fighter.x + fighter.width);
-  if (yCollission === true) {console.log("The ball is too low",yCollission);}
-  if (xCollissionA && xCollissionB) {console.log("The ball is in the zone of the fighter");}
-  // if (xCollission === true) {console.log("The ball is passings the fighter")};
-  if (xCollissionA && xCollissionB && yCollission){console.log("touching ball");
-    {squareBall.vy *= -1};
-};
-// if ( && ()
-//   {console.log("I touched the bar!!")};
+
+//ANIMATED GAME ELEMENTS 
+//.................................
+//.................................
+
+var fighter = new Fighter(430,500,80,80,0,0,"white",ctx);
+var squareBall = new SquareBall(250,250,4,-10,40,"#7FFFD4",ctx);
+var allBullets = []; //array will be filled with bullets 
+
+//checkCollission1() checks if fighter and squareBall meet 
+//yCollision checks if they collide on y axis
+//xCollissionA checks if the edge of the squareBall is right of the left outer edge of the fighter
+//xCollisionB checks the same for the right edge of the fighter
+
+
+//Function to Draw on Canvas 
+
+function checkCollission1(squareBall) {
+  var yCollissionTop = false;
+  var xCollissionA = false ;
+  var xCollissionB = false;
+  if((squareBall.y+squareBall.side) === (playingField.yMin-fighter.height)){
+  yCollissionTop  = true};
+
+  if ((squareBall.x + squareBall.side > fighter.x) === true){
+    xCollissionA = true};
+  if(squareBall.x < (fighter.x + fighter.width)=== true){
+    xCollissionB = true};
+
+  if ((xCollissionA && xCollissionB) && yCollissionTop)
+  {
+    console.log("touching ball",yCollissionTop, xCollissionA, xCollissionB);
+    // squareBall.y = playingField.yMin-fighter.height-10;
+    squareBall.y = squareBall.y - 10;
+    // squareBall.y = squareBall.y;
+    squareBall.vy *= -1;
+    fighter.score +=1;
+  };
+
 };
 
 setInterval(function()
 {
   ctx.clearRect(0,0,width,height);
   ctx.save(); 
+
   frames++;
   drawBorder();
-  checkCollission1();
+  drawBullets(); 
+  moveBullets();
+
+//paint score 
+  ctx.fillStyle = "white";
+  ctx.font = "50px Codystar";
+  ctx.fillText(fighter.score.toString(),550,130);
+
+//paint lives 
+  for (var index = 0; index < fighter.lives; index++) {
+  ctx.drawImage(heart,640+index*80,20);};
+
   fighter.draw(ctx);
-  squareBall.draw(ctx);
-  squareBall.changePosition(playingField);
+
+  //draw ball, if we are still alive. 
+  if (fighter.lives>0) {
+    squareBall.draw(ctx);
+    squareBall.changePosition(playingField,canvas,fighter);
+    checkCollission1(squareBall);
+  }
+
+    if (fighter.lives === 0) {
+      ctx.clearRect(0,0,width,height);
+      ctx.fillStyle = "yellow";
+      ctx.font = "80px Codystar";
+      ctx.fillText("Game Over",250,300);
+    }
+  
+
   ctx.save();
-},1000/60)
+},1000/20);
 
 //fighter animation
 
@@ -75,11 +141,15 @@ document.onkeydown = function(e) {
   switch (e.keyCode) {
     case 39:
       fighter.moveRight(playingField);
-      console.log("movedright");
       break;
     case 37:
       fighter.moveLeft(playingField);
-      console.log("moved left");
       break;
+    case 32:
+    console.log("space");
+    fighter.createBullets(allBullets);
+    break;
   }
 }
+
+

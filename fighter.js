@@ -1,4 +1,4 @@
-function Fighter (x=430,y=500,vx=0,vy=0,ax=0,ay=0,color="white",ctx) {
+function Fighter (x=430,y=500,vx=0,vy=0,ax=0,ay=0,color="white",ctx,score=0,lives=3) {
   this.x = x;
   this.y = y;
   this.vx = vx; 
@@ -9,6 +9,8 @@ function Fighter (x=430,y=500,vx=0,vy=0,ax=0,ay=0,color="white",ctx) {
   this.height= 40; //height of player
   this.width= 140; //widt of player
   this.ctx = ctx;
+  this.score = score;
+  this.lives = lives; 
 }
 
 //fither has  an initial position and can move to left or right.
@@ -37,7 +39,7 @@ Fighter.prototype.moveRight = function (playingField)
     this.x = playingField.xMax - this.width
     }
     else this.x +=this.vx;
-  }
+  };
 
 Fighter.prototype.moveLeft = function (playingField) {
     if (this.x - playingField.xMin < this.vx)
@@ -45,5 +47,11 @@ Fighter.prototype.moveLeft = function (playingField) {
         this.x = playingField.xMin;
       }
     else this.x -= this.vx;
-    console.log(this.x, "x");
-    }
+    };
+
+Fighter.prototype.createBullets = function () {
+  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10,-10,-10,"#88fafc",this.ctx,10,10));
+  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10,0,-10,"#93aeff",this.ctx,10,10));
+  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10  ,10,-10,"#6e64ef",this.ctx,10,10));
+  console.log("allBullets",allBullets);
+}
