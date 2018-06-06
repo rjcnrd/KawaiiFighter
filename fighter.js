@@ -50,10 +50,15 @@ Fighter.prototype.moveLeft = function (playingField) {
     };
 
 Fighter.prototype.createBullets = function () {
-  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10,-10,-10,"#88fafc",this.ctx,10,10,5));
-  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10,-5,-10,"#6e64ef",this.ctx,10,10,5));
+  allBullets.push(new Bullet(this.x+(this.width/2)+2,this.y+this.height-10,-0.5,-10,"#9664ef",this.ctx,10,10,5));
+  allBullets.push(new Bullet(this.x+(this.width/2)+1,this.y+this.height-10,-0.3,-10,"#6e64ef",this.ctx,10,10,5));
   allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10,0,-10,"#93aeff",this.ctx,10,10,5));
-  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10,5,-10,"#6e64ef",this.ctx,10,10,5));
-  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10  ,10,-10,"#88fafc",this.ctx,10,10,5));
+  allBullets.push(new Bullet(this.x+(this.width/2)-1,this.y+this.height-10,0.3,-10,"#6e64ef",this.ctx,10,10,5));
+  allBullets.push(new Bullet(this.x+(this.width/2)-2,this.y+this.height-10 ,0.5,-10,"#9664ef",this.ctx,10,10,5));
   console.log("allBullets",allBullets);
+}
+
+Fighter.prototype.createEvils = function(image,allEvils){
+
+  allEvils.push(new Evil(450,50 ,0,5,0,image,this.ctx));
 }

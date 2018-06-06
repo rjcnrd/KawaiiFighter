@@ -15,8 +15,9 @@ var playingField = {
 
 var width =  1000;
 var height = 600;
-var frames = 0;  //Frames is counting the amount of time the canvas was redrawn
 
+var frames = 0;  //Frames is counting the amount of time the canvas was redrawn
+var Evilcounter = 1; 
 
 //IMAGES
 //.................................
@@ -30,6 +31,9 @@ background2.src = "images/background-2.png";
 var heart = new Image;
 heart.src = "images/Heart-Pink.png";
 
+var evilPurple = new Image;
+evilPurple.src = "/images/monster-purple-150-150.png";
+
 //drawBorder() changes the background border every tenth frame (6 times in 60 frames)
 
 function drawBorder(){
@@ -42,19 +46,32 @@ function drawBorder(){
 function drawBullets(){
   for (var i = 0; i < allBullets.length; i++) {
     allBullets[i].draw();
-    console.log("draw bullets");
-   
+    // console.log("draw bullets");
   }
   
 }
 
+//filter out the bullets that are still visible and change their position)
 function moveBullets(){
   for (var i = 0; i < allBullets.length; i++) {
-    allBullets[i].changePosition();
-    console.log("changing position of bullets");
+    allBullets[i].changePosition(playingField);
+  }
+  allBullets = allBullets.filter(function(element){
+  return (element.y > playingField.yMax && element.x > playingField.xMin && element.x < playingField.xMax ) //ymin = 540 
+  });
+}
+
+function drawEvils(){
+  for (var i = 0; i < allEvils.length; i++) {
+  allEvils[i].draw();
   }
 }
 
+function moveEvils(){
+  for (var i = 0; i < allEvils.length; i++) {
+    allEvils[i].changePosition();
+  }
+}
 
 //ANIMATED GAME ELEMENTS 
 //.................................
@@ -63,14 +80,12 @@ function moveBullets(){
 var fighter = new Fighter(430,500,80,80,0,0,"white",ctx);
 var squareBall = new SquareBall(250,250,4,-10,40,"#7FFFD4",ctx);
 var allBullets = []; //array will be filled with bullets 
+var allEvils = []; // Collecting all the Evil Warriors 
 
 //checkCollission1() checks if fighter and squareBall meet 
 //yCollision checks if they collide on y axis
 //xCollissionA checks if the edge of the squareBall is right of the left outer edge of the fighter
 //xCollisionB checks the same for the right edge of the fighter
-
-
-//Function to Draw on Canvas 
 
 function checkCollission1(squareBall) {
   var yCollissionTop = false;
@@ -96,6 +111,31 @@ function checkCollission1(squareBall) {
 
 };
 
+//checkCollission2 checks if ONE Bullet b part of allBullets 
+//collides with ONE Evil e part of allEvils 
+
+function checkCollission2(){
+  var collissionOnYAxis = false;
+  var collissionOnXAxis = false;
+  var numberOfCollissions; 
+
+  for (let e = 0; e < allEvils.length; e++) {
+
+    for (let b = 0; b < allBullets.length; b++) { 
+
+      collissionOnYAxis = ( (allEvils[e].y+allEvils[e].height) >= allBullets[b].y);
+      
+      collissionOnXAxis = (allEvils[e].x <= allBullets[b].x && allEvils[e].x + allEvils[e].width > allBullets[b].x);
+      
+        if ( collissionOnYAxis && collissionOnXAxis ){
+          allBullets[b].color = "yellow";
+          console.log("Bullet shot Evil");
+          numberOfCollissions++;}
+        
+    }
+  }
+}
+
 setInterval(function()
 {
   ctx.clearRect(0,0,width,height);
@@ -105,7 +145,6 @@ setInterval(function()
   drawBorder();
   drawBullets(); 
   moveBullets();
-
 //paint score 
   ctx.fillStyle = "white";
   ctx.font = "50px Codystar";
@@ -122,6 +161,18 @@ setInterval(function()
     squareBall.draw(ctx);
     squareBall.changePosition(playingField,canvas,fighter);
     checkCollission1(squareBall);
+
+    if (Evilcounter<=1){
+      fighter.createEvils(evilPurple,allEvils);
+      Evilcounter++;
+    };
+    
+    drawEvils();
+    moveEvils();     
+    checkCollission2();
+
+    //add here that evil is introduced at some point. 
+
   }
 
     if (fighter.lives === 0) {
@@ -129,11 +180,14 @@ setInterval(function()
       ctx.fillStyle = "yellow";
       ctx.font = "80px Codystar";
       ctx.fillText("Game Over",250,300);
+      clearInterval(1); //stops the animation 
     }
   
 
   ctx.save();
-},1000/60);
+},1000/10);
+
+
 
 //fighter animation
 
@@ -146,7 +200,7 @@ document.onkeydown = function(e) {
       fighter.moveLeft(playingField);
       break;
     case 32:
-    console.log("space");
+    // console.log("space");
     fighter.createBullets(allBullets);
     break;
   }

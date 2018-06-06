@@ -22,5 +22,5 @@ Bullet.prototype.draw = function () {
 
 Bullet.prototype.changePosition = function () {
     this.x += this.vx; 
-    this.y += (this.vy + this.ay);
+    this.y += (this.vy + this.ay);      
 }
