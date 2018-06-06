@@ -58,7 +58,8 @@ Fighter.prototype.createBullets = function () {
   console.log("allBullets",allBullets);
 }
 
-Fighter.prototype.createEvils = function(image,allEvils){
-
-  allEvils.push(new Evil(450,50 ,0,5,0,image,this.ctx));
-}
+Fighter.prototype.createEvils = function(images,allEvils,playingField){
+  var selectImage = Math.floor(Math.random()*4);
+  var selectPosition = playingField.xMin + 75 + Math.floor(Math.random()*playingField.xMax);
+  allEvils.push(new Evil(selectPosition,50,0,2,0,images[selectImage],this.ctx));
+}       

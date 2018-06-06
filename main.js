@@ -17,7 +17,7 @@ var width =  1000;
 var height = 600;
 
 var frames = 0;  //Frames is counting the amount of time the canvas was redrawn
-var Evilcounter = 1; 
+var evilCounter = 3; 
 
 //IMAGES
 //.................................
@@ -32,7 +32,18 @@ var heart = new Image;
 heart.src = "images/Heart-Pink.png";
 
 var evilPurple = new Image;
-evilPurple.src = "/images/monster-lady-purple-150-150.png";
+evilPurple.src = "/images/monster-purple-150-150.png";
+
+var evilPurpleLady = new Image;
+evilPurpleLady.src = "/images/monster-lady-purple-150-150.png";
+
+var evilTurqouise = new Image;
+evilTurqouise.src = "/images/monster-turqouise-150-150.png";
+
+var evilPink = new Image;
+evilPink.src = "/images/monster-pink-150-150.png";
+
+var evilImages =[evilTurqouise,evilPurple,evilPink,evilPurpleLady];
 
 //drawBorder() changes the background border every tenth frame (6 times in 60 frames)
 
@@ -71,6 +82,10 @@ function moveEvils(){
   for (var i = 0; i < allEvils.length; i++) {
     allEvils[i].changePosition();
   }
+
+  allEvils = allEvils.filter(function(element){
+    return (element.y > playingField.yMax) //ymin = 540 
+    });
 }
 
 //ANIMATED GAME ELEMENTS 
@@ -116,6 +131,7 @@ function checkCollission1(squareBall) {
 
 function checkCollission2(){
   if(allEvils.length>0){
+
     var collissionOnYAxis = false;
     var collissionOnXAxis = false;
     var numberOfCollissions; 
@@ -131,11 +147,35 @@ function checkCollission2(){
           
             if (collissionOnYAxis && collissionOnXAxis){
               allEvils.splice(e,1);
+              allBullets.splice(b,5); 
+              evilCounter++; 
               fighter.score +=50;}
           }
           
       }
     }
+  //Check if fighter and monster collide ! 
+
+  var collissionFighterXAxisA = false; 
+  var collissionFighterXAxisB = false; 
+  var collissionFighterYAxis = false; 
+  for (let e = 0; e < allEvils.length; e++){
+
+    if((allEvils[e].y+75) === (playingField.yMin-fighter.height)){
+      collissionFighterYAxis = true};
+    
+    if ((allEvils[e].x + 75 > fighter.x) === true){
+        collissionFighterXAxisA  = true};
+        
+    if(allEvils[e].x < (fighter.x + fighter.width)=== true){
+        collissionFighterXAxisB = true};
+
+    if( collissionFighterXAxisA && collissionFighterXAxisB && collissionFighterYAxis ) 
+    {fighter.color ="grey";
+    setTimeout(function(){fighter.color ="white";}, 500);
+      fighter.lives -=1;}
+  }
+
   }
 }
 
@@ -151,7 +191,7 @@ setInterval(function()
 //paint score 
   ctx.fillStyle = "white";
   ctx.font = "50px Codystar";
-  ctx.fillText(fighter.score.toString(),550,130);
+  ctx.fillText(fighter.score.toString(),70,120);
 
 //paint lives 
   for (var index = 0; index < fighter.lives; index++) {
@@ -161,14 +201,15 @@ setInterval(function()
 
   //draw ball, if we are still alive. 
   if (fighter.lives>0) {
-    squareBall.draw(ctx);
+    squareBall.draw();
     squareBall.changePosition(playingField,canvas,fighter);
     checkCollission1(squareBall);
 
-    if (Evilcounter<=1){
-      fighter.createEvils(evilPurple,allEvils);
-      Evilcounter++;
-    };
+if (evilCounter>0){
+    fighter.createEvils(evilImages,allEvils,playingField);
+    console.log("allEvils",allEvils);
+    evilCounter--;
+}
     
     drawEvils();
     moveEvils();     
@@ -203,7 +244,7 @@ document.onkeydown = function(e) {
       fighter.moveLeft(playingField);
       break;
     case 32:
-    // console.log("space");
+
     fighter.createBullets(allBullets);
     break;
   }

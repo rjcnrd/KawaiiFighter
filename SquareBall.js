@@ -15,7 +15,7 @@ function SquareBall (startX = 0,startY = 0,startVX = 0,startVY = 0,side=10,color
 
 //draw()
 
-SquareBall.prototype.draw = function (ctx) {
+SquareBall.prototype.draw = function () {
   this.ctx.save();
   this.ctx.beginPath();
   this.ctx.rect(this.x,this.y,this.side,this.side);
