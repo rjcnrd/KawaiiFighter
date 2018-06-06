@@ -32,7 +32,7 @@ var heart = new Image;
 heart.src = "images/Heart-Pink.png";
 
 var evilPurple = new Image;
-evilPurple.src = "/images/monster-purple-150-150.png";
+evilPurple.src = "/images/monster-lady-purple-150-150.png";
 
 //drawBorder() changes the background border every tenth frame (6 times in 60 frames)
 
@@ -106,7 +106,7 @@ function checkCollission1(squareBall) {
     squareBall.y = squareBall.y - 10;
     // squareBall.y = squareBall.y;
     squareBall.vy *= -1;
-    fighter.score +=1;
+    fighter.score +=10;
   };
 
 };
@@ -115,23 +115,26 @@ function checkCollission1(squareBall) {
 //collides with ONE Evil e part of allEvils 
 
 function checkCollission2(){
-  var collissionOnYAxis = false;
-  var collissionOnXAxis = false;
-  var numberOfCollissions; 
+  if(allEvils.length>0){
+    var collissionOnYAxis = false;
+    var collissionOnXAxis = false;
+    var numberOfCollissions; 
 
-  for (let e = 0; e < allEvils.length; e++) {
-
-    for (let b = 0; b < allBullets.length; b++) { 
-
-      collissionOnYAxis = ( (allEvils[e].y+allEvils[e].height) >= allBullets[b].y);
+    for (let e = 0; e < allEvils.length; e++) {
+      for (let b = 0; b < allBullets.length; b++) { 
+        if(allEvils.length>0){
+            
+          collissionOnYAxis = ( allEvils[e].y +75  > allBullets[b].y);
+          // console.log("allEvils[e].y",allEvils[e].y,"allBullets[b].y", allBullets[b].y);
       
-      collissionOnXAxis = (allEvils[e].x <= allBullets[b].x && allEvils[e].x + allEvils[e].width > allBullets[b].x);
-      
-        if ( collissionOnYAxis && collissionOnXAxis ){
-          allBullets[b].color = "yellow";
-          console.log("Bullet shot Evil");
-          numberOfCollissions++;}
-        
+          collissionOnXAxis = ( (allEvils[e].x <= allBullets[b].x) && (allEvils[e].x + 75 > allBullets[b].x));
+          
+            if (collissionOnYAxis && collissionOnXAxis){
+              allEvils.splice(e,1);
+              fighter.score +=50;}
+          }
+          
+      }
     }
   }
 }
@@ -185,7 +188,7 @@ setInterval(function()
   
 
   ctx.save();
-},1000/10);
+},1000/60);
 
 
 
