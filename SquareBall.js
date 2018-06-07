@@ -2,7 +2,7 @@
 // Square Ball has to be kept inside the playing field or Kawaii Fighter loses one Life 
 // Square Ball 
 
-function SquareBall (startX = 0,startY = 0,startVX = 0,startVY = 0,side=10,color = "#7FFFD4",ctx) 
+function SquareBall (startX = 0,startY = 0,startVX = 0,startVY = 0,side=10,color = "#7FFFD4",ctx,ax=0) 
 {  
   this.side = side;
   this.x = startX;
@@ -11,6 +11,7 @@ function SquareBall (startX = 0,startY = 0,startVX = 0,startVY = 0,side=10,color
   this.vy = startVY;
   this.color = color;
   this.ctx = ctx; 
+  this.ax= ax; 
 }
 
 //draw()
@@ -33,6 +34,7 @@ SquareBall.prototype.draw = function () {
 SquareBall.prototype.changePosition = function (playingField,canvas,fighter) {
     this.x += this.vx; 
     this.y += this.vy;
+    this.xy += this.ax;
   //reflect on right border
     if(this.x >= playingField.xMax-this.side){
       // console.log("touched right",this.x);

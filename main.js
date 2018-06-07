@@ -24,7 +24,7 @@ var evilsToCreate = 3;
 //.................................
 
 var fighter = new Fighter(430,1145,80,80,0,0,"white",ctx);
-var squareBall = new SquareBall(250,250+600,4,-10,40,"#7FFFD4",ctx);
+var squareBall = new SquareBall(250,250+600,4,-10,40,"#7FFFD4",ctx,0);
 var allBullets = []; //array will be filled with bullets 
 var allEvils = []; // Collecting all the Evil Warriors 
 
@@ -64,7 +64,6 @@ function drawStartFrame0(){
   ctx.fillText("幸運の小さな戦士",370,700);
   ctx.restore();
 }
-
 function drawStartFrame1(){
   ctx.save();
   ctx.clearRect(0,0,width,height);
@@ -76,7 +75,6 @@ function drawStartFrame1(){
   ctx.fillText("grab some candy",350,700);
   ctx.restore();
 }
-
 function drawStartFrame2(){
   ctx.save();
   ctx.clearRect(0,0,width,height);
@@ -88,8 +86,6 @@ function drawStartFrame2(){
   ctx.fillText("幸運の小さな戦士",420,700);
   ctx.restore();
 }
-
-
 function drawStartFrame3(){
   ctx.save();
   ctx.clearRect(0,0,width,height);
@@ -119,6 +115,40 @@ function drawBorder(){
     ctx.save();
     ctx.beginPath();
     ctx.strokeStyle="#ff62b1";
+    ctx.setLineDash([20,15]);
+    ctx.lineWidth=15;
+    ctx.strokeRect(0,0,width,height);
+    ctx.closePath();
+    ctx.restore();
+  }
+}
+
+function drawRainbowBorder(){
+  var lessFrames = Math.floor(frames%10/6); // gives 0 or 1
+  if (lessFrames == 0) {
+    ctx.save();
+    ctx.beginPath();
+    var gradient=ctx.createLinearGradient(0,0,width,height);
+    gradient.addColorStop("0","#1bc9ee");
+    gradient.addColorStop("0.2","#6647f0");
+    gradient.addColorStop("0.4","#ff62b1");
+    // gradient.addColorStop("0.6","fe0000");
+    // gradient.addColorStop("1.0","#fff7b4");
+    ctx.strokeStyle=gradient;
+    ctx.setLineDash([5,5]);
+    ctx.lineWidth=15;
+    ctx.strokeRect(0,0,width,height);
+    ctx.closePath();
+    ctx.restore();
+  } 
+
+  else {
+    ctx.save();
+    ctx.beginPath();
+    var gradient=ctx.createLinearGradient(0,0,width,height);
+    gradient.addColorStop("0.6","yellow");
+    gradient.addColorStop("1.0","#fff7b4");
+    ctx.strokeStyle=gradient;
     ctx.setLineDash([20,15]);
     ctx.lineWidth=15;
     ctx.strokeRect(0,0,width,height);
@@ -292,8 +322,11 @@ setInterval(function()
   
 
   if (frames>480){
+  
+    drawBorder(); 
 
-    drawBorder();
+    // drawBorder();
+    
     drawBullets(); 
     moveBullets();
     drawScore();
@@ -302,19 +335,35 @@ setInterval(function()
 
     //draw ball, if we are still alive. 
     if (fighter.lives>0) {
+
       squareBall.draw();
       squareBall.changePosition(playingField,canvas,fighter);
       checkCollission1(squareBall);
 
-      while (evilsToCreate>0){
+      if(fighter.score>50){
+
+        if (fighter.score<200){
+          drawRainbowBorder();
+        };
+
+        while (evilsToCreate>0){
           fighter.createEvils(evilImages,allEvils,playingField);
           evilsToCreate--;
-      }
-        
-      drawEvils();
-      moveEvils();     
-      checkCollission2();
-      checkCollissionFighterEvil();
+        };
+
+        if(fighter.score>1500){
+
+          if (fighter.score<1550){
+            drawRainbowBorder();
+            };
+       
+        };
+
+        drawEvils();
+        moveEvils();     
+        checkCollission2();
+        checkCollissionFighterEvil();
+      } 
     }
 
       if (fighter.lives === 0) {
