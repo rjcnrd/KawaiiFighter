@@ -8,6 +8,7 @@ var ctx = document.getElementById("canvas").getContext("2d");
 var width =  1000;
 var height = 1200;
 //playingfield saves the maximum coordinates that objects can have without touching the game border. 
+
 var playingField = {
   xMax: width-20, //xmax Furthest most that objects can be without touching the frame
   xMin:  20, //xmin
@@ -15,10 +16,8 @@ var playingField = {
   yMin: height-20,//ymin
 };
 
-
-
 var frames = 0;  //Frames is counting the amount of time the canvas was redrawn
-var evilCounter = 3; 
+var evilsToCreate = 3; 
 
 //ANIMATED GAME ELEMENTS 
 //.................................
@@ -37,27 +36,18 @@ var heart = new Image;
 heart.src = "images/Heart-Pink.png";
 
 var evilPurple = new Image;
-evilPurple.src = "/images/monster-purple-150-150.png";
+evilPurple.src = "images/monster-purple-150-150.png";
 
 var evilPurpleLady = new Image;
-evilPurpleLady.src = "/images/monster-lady-purple-150-150.png";
+evilPurpleLady.src = "images/monster-lady-purple-150-150.png";
 
 var evilTurqouise = new Image;
-evilTurqouise.src = "/images/monster-turqouise-150-150.png";
+evilTurqouise.src = "images/monster-turqouise-150-150.png";
 
 var evilPink = new Image;
-evilPink.src = "/images/monster-pink-150-150.png";
+evilPink.src = "images/monster-pink-150-150.png";
 
 var evilImages =[evilTurqouise,evilPurple,evilPink,evilPurpleLady];
-
-//drawBorder() changes the background border every tenth frame (6 times in 60 frames)
-
-// function drawBorder(){
-//   var lessFrames = Math.floor(frames%10/6); // gives 0 or 1
-//   if (lessFrames == 0) {
-//     ctx.drawImage(background1,0,0);
-//   } else {ctx.drawImage(background2,0,0);}
-// }
 
 function drawBorder(){
   var lessFrames = Math.floor(frames%10/6); // gives 0 or 1
@@ -67,21 +57,17 @@ function drawBorder(){
     ctx.strokeStyle="#ff62b1";
     ctx.setLineDash([5,5]);
     ctx.lineWidth=15;
-    // ctx.strokeRect(5,5,width-10,height-10);
     ctx.strokeRect(0,0,width,height);
     ctx.closePath();
     ctx.restore();
-
-
-
   } 
+
   else {
     ctx.save();
     ctx.beginPath();
     ctx.strokeStyle="#ff62b1";
     ctx.setLineDash([20,15]);
     ctx.lineWidth=15;
-    // ctx.strokeRect(5,5,width-10,height-10);
     ctx.strokeRect(0,0,width,height);
     ctx.closePath();
     ctx.restore();
@@ -91,7 +77,6 @@ function drawBorder(){
 function drawBullets(){
   for (var i = 0; i < allBullets.length; i++) {
     allBullets[i].draw();
-    // console.log("draw bullets");
   }
   
 }
@@ -106,27 +91,37 @@ function moveBullets(){
   });
 }
 
+function drawScore(){
+  ctx.fillStyle = "white";
+  ctx.font = "50px Codystar";
+  ctx.fillText(fighter.score.toString(),70,120);
+};
+
+function drawLives(){
+  for (var index = 0; index < fighter.lives; index++) {
+  ctx.drawImage(heart,640+index*80,20);};
+};
+
+
 function drawEvils(){
   for (var i = 0; i < allEvils.length; i++) {
   allEvils[i].draw();
   }
 }
-
+//moveEvils moves the Evils and removes them from the array if they leave the playing field. 
+//When Evil leaves the y Axis, EvilsToCreate is set +1 
 function moveEvils(){
   for (var i = 0; i < allEvils.length; i++) {
     allEvils[i].changePosition();
+    if ((allEvils[i].y +75)> playingField.yMin){
+    evilsToCreate++;
   }
-
-// change counter when monster disappears on y axis 
-
-for (var i = 0; i < allEvils.length; i++) {
-  if (allEvils[i].y > playingField.yMin) {evilCounter++;}
 }
 
   allEvils = allEvils.filter(function(element){
-    return (element.y < playingField.yMin) //ymin = 540 
-    });
-  console.log("allEvils after filter",allEvils)
+    return (element.y +75 < playingField.yMin) //ymin = 540 
+  });
+    // console.log("allEvils after filter",allEvils)
 }
 
 //checkCollission1() checks if fighter and squareBall meet 
@@ -163,73 +158,111 @@ function checkCollission1(squareBall) {
 
 function checkCollission2(){
   if(allEvils.length>0){
-
-    var collissionOnYAxis = false;
-    var collissionOnXAxis = false;
-    var numberOfCollissions; 
+    var ColBulletEvilY = false;
+    var ColBulletEvilX = false;
+    // var numberOfCollissions; 
 
     for (let e = 0; e < allEvils.length; e++) {
       for (let b = 0; b < allBullets.length; b++) { 
-        if(allEvils.length>0){
-            
-          collissionOnYAxis = ( allEvils[e].y +75  > allBullets[b].y);
+          ColBulletEvilY = ((allEvils[e].y)+75  > allBullets[b].y);
           // console.log("allEvils[e].y",allEvils[e].y,"allBullets[b].y", allBullets[b].y);
       
-          collissionOnXAxis = ( (allEvils[e].x <= allBullets[b].x) && (allEvils[e].x + 75 > allBullets[b].x));
+          ColBulletEvilX = ( (allEvils[e].x <= allBullets[b].x) && (allEvils[e].x + 75 > allBullets[b].x));
           
-            if (collissionOnYAxis && collissionOnXAxis){
-              allEvils.splice(e,1);
-              console.log("allEvils after collission",allEvils);
-              allBullets.splice(b,5); 
-              evilCounter++; 
-              fighter.score +=50;}
-          }
+            if (ColBulletEvilY && ColBulletEvilX){
+              allEvils.splice(e,1); //delete the evil that was shot 
+              console.log("allEvils after collission",allEvils); 
+              allBullets.splice(b,5); //delete the array of the 5 bullets used to shoot 
+              evilsToCreate++; // make sure another evil is introduced into the game 
+              fighter.score +=50;
+              // e--; //we took out one Evil, so the next one "moves up"
+              // b--; //we took out one Bullet, so the next one "moves up"
+            }
+          
           
       }
     }
-  //Check if fighter and monster collide ! 
-
-  var collissionFighterXAxisA = false; 
-  var collissionFighterXAxisB = false; 
-  var collissionFighterYAxis = false; 
-  for (let e = 0; e < allEvils.length; e++){
-
-    if((allEvils[e].y+75) === (playingField.yMin-fighter.height)){
-      collissionFighterYAxis = true};
-    
-    if ((allEvils[e].x + 75 > fighter.x) === true){
-        collissionFighterXAxisA  = true};
-        
-    if(allEvils[e].x < (fighter.x + fighter.width)=== true){
-        collissionFighterXAxisB = true};
-
-    if( collissionFighterXAxisA && collissionFighterXAxisB && collissionFighterYAxis ) 
-    {fighter.color ="grey";
-    setTimeout(function(){fighter.color ="white";}, 500);
-      fighter.lives -=1;}
-  }
-
   }
 }
+
+function checkCollissionFighterEvil(){
+  var yCollissionTop = false;
+  var xCollissionA = false ;
+  var xCollissionB = false;
+  for (let e = 0; e < allEvils.length; e++) {
+    
+    if((allEvils[e].y+ 75) >= (playingField.yMin-fighter.height)){
+    yCollissionTop  = true};
+  
+    if ((allEvils[e].x + 75 > fighter.x) === true){
+      xCollissionA = true};
+    if(allEvils[e].x < (fighter.x + fighter.width) === true){
+      xCollissionB = true};
+  
+    if ((xCollissionA && xCollissionB) && yCollissionTop)
+    {
+      allEvils.splice(e,1);
+      console.log("Evil is Touching the Fighter");
+      fighter.lives -=1; 
+      evilsToCreate++;
+    };
+    
+  }
+
+};
+  //Check if fighter and monster collide ! 
+
+  
+//   for (var e = 0; e < allEvils.length; e++){
+
+//     var collissionFighterXAxisA = false; 
+//     var collissionFighterXAxisB = false; 
+//     var collissionFighterYAxis = false; 
+//     var countCollissionWithFighter = 0; 
+    
+//       if((allEvils[e].y+75) >= (playingField.yMin-fighter.height)){
+//         collissionFighterYAxis = true;
+//         console.log("collissionFighterYAxis",collissionFighterYAxis);
+//         };
+      
+//       if ((allEvils[e].x + 75 > fighter.x) === true){
+//           collissionFighterXAxisA  = true;
+//         };
+          
+//       if(allEvils[e].x < (fighter.x + fighter.width)=== true){
+//           collissionFighterXAxisB = true;
+//         };
+
+//       if( collissionFighterXAxisA && collissionFighterXAxisB && collissionFighterYAxis ){
+//         countCollissionWithFighter++;
+//         }
+//       }
+//     if (countCollissionWithFighter>0){
+//       fighter.color ="grey";
+//       fighter.lives -=1;
+//       countCollissionWithFighter--;
+//       allEvils.splice(e,1);
+//       e--;
+
+//       setTimeout(function(){fighter.color ="white";}, 500);
+//     }
+//     // for (var c = 0; c < countCollissionWithFighter; c++) {
+//     //   fighter.lives -=1;
+//     // }
+
+//   }
+// }
 
 setInterval(function()
 {
   ctx.clearRect(0,0,width,height);
   ctx.save(); 
-
   frames++;
   drawBorder();
   drawBullets(); 
   moveBullets();
-//paint score 
-  ctx.fillStyle = "white";
-  ctx.font = "50px Codystar";
-  ctx.fillText(fighter.score.toString(),70,120);
-
-//paint lives 
-  for (var index = 0; index < fighter.lives; index++) {
-  ctx.drawImage(heart,640+index*80,20);};
-
+  drawScore();
+  drawLives(); 
   fighter.draw(ctx);
 
   //draw ball, if we are still alive. 
@@ -238,18 +271,15 @@ setInterval(function()
     squareBall.changePosition(playingField,canvas,fighter);
     checkCollission1(squareBall);
 
-if (evilCounter>0){
-    fighter.createEvils(evilImages,allEvils,playingField);
-    console.log("allEvils",allEvils);
-    evilCounter--;
-}
-    
+    while (evilsToCreate>0){
+        fighter.createEvils(evilImages,allEvils,playingField);
+        evilsToCreate--;
+    }
+      
     drawEvils();
     moveEvils();     
     checkCollission2();
-
-    //add here that evil is introduced at some point. 
-
+    checkCollissionFighterEvil();
   }
 
     if (fighter.lives === 0) {
@@ -262,25 +292,26 @@ if (evilCounter>0){
   
 
   ctx.save();
-},1000/60);
+},1000/20);
 
 
 
-//fighter animation
+//fighter animation through keys 
 
 document.onkeydown = function(e) {
   switch (e.keyCode) {
     case 39:
       fighter.moveRight(playingField);
       break;
+    
     case 37:
       fighter.moveLeft(playingField);
       break;
+
     case 32:
-
-    fighter.createBullets(allBullets);
-    break;
+      e.preventDefault();
+      fighter.createBullets(allBullets);
+      break;
   }
-}
-
+};
 
