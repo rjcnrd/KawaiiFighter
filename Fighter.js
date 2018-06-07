@@ -50,11 +50,22 @@ Fighter.prototype.moveLeft = function (playingField) {
     };
 
 Fighter.prototype.createBullets = function () {
-  allBullets.push(new Bullet(this.x+(this.width/2)+2,this.y+this.height-10,-0.5,-10,"#9664ef",this.ctx,10,10,5));
-  allBullets.push(new Bullet(this.x+(this.width/2)+1,this.y+this.height-10,-0.3,-10,"#6e64ef",this.ctx,10,10,5));
-  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10,0,-10,"#93aeff",this.ctx,10,10,5));
-  allBullets.push(new Bullet(this.x+(this.width/2)-1,this.y+this.height-10,0.3,-10,"#6e64ef",this.ctx,10,10,5));
-  allBullets.push(new Bullet(this.x+(this.width/2)-2,this.y+this.height-10 ,0.5,-10,"#9664ef",this.ctx,10,10,5));
+  // allBullets.push(new Bullet(this.x+(this.width/2)+2,this.y+this.height-10,-0.5,-10,"#9664ef",this.ctx,10,10,5));
+  // allBullets.push(new Bullet(this.x+(this.width/2)+1,this.y+this.height-10,-0.3,-10,"#6e64ef",this.ctx,10,10,5));
+  // allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10,0,-10,"#93aeff",this.ctx,10,10,5));
+  // allBullets.push(new Bullet(this.x+(this.width/2)-1,this.y+this.height-10,0.3,-10,"#6e64ef",this.ctx,10,10,5));
+  // allBullets.push(new Bullet(this.x+(this.width/2)-2,this.y+this.height-10 ,0.5,-10,"#9664ef",this.ctx,10,10,5));
+  allBullets.push(new Bullet(this.x+(this.width/2)+2,this.y+this.height-10,-0.5,-10,"#1bc9ee",this.ctx,10,10,5));//tur
+  allBullets.push(new Bullet(this.x+(this.width/2)+1,this.y+this.height-10,-0.3,-10,"#6647f0",this.ctx,10,10,5));//purp
+  allBullets.push(new Bullet(this.x+(this.width/2)+1,this.y+this.height-10,-0.2,-10,"#ff62b1",this.ctx,10,10,5));//pink
+  allBullets.push(new Bullet(this.x+(this.width/2)+1,this.y+this.height-10,-0.1,-10,"#fe0000",this.ctx,10,10,5));//red
+  allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10,0,-10,"#fff7b4",this.ctx,10,10,5)); //yellow center 
+  allBullets.push(new Bullet(this.x+(this.width/2)-1,this.y+this.height-10,0.1,-10,"#fe0000",this.ctx,10,10,5));//red 
+  allBullets.push(new Bullet(this.x+(this.width/2)-1,this.y+this.height-10,0.2,-10,"#ff62b1",this.ctx,10,10,5)); // pink 
+  allBullets.push(new Bullet(this.x+(this.width/2)-1,this.y+this.height-10,0.3,-10,"#6647f0",this.ctx,10,10,5)); //purple
+  allBullets.push(new Bullet(this.x+(this.width/2)-2,this.y+this.height-10 ,0.5,-10,"#1bc9ee",this.ctx,10,10,5));//tur
+
+  
 }
 
 Fighter.prototype.createEvils = function(images,allEvils,playingField){
