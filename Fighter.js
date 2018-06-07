@@ -14,10 +14,7 @@ function Fighter (x=430,y=500,vx=0,vy=0,ax=0,ay=0,color="white",ctx,score=0,live
 }
 
 //fither has  an initial position and can move to left or right.
-// x : position in pixel.
-// y: position in pixel 
-// vx: velocity on x axis
-// vy : velocity on y axis
+// x : position in pixel. y: position in pixel vx: velocity on x axis vy : velocity on y axis
 
 
 Fighter.prototype.draw = function () {
@@ -50,11 +47,6 @@ Fighter.prototype.moveLeft = function (playingField) {
     };
 
 Fighter.prototype.createBullets = function () {
-  // allBullets.push(new Bullet(this.x+(this.width/2)+2,this.y+this.height-10,-0.5,-10,"#9664ef",this.ctx,10,10,5));
-  // allBullets.push(new Bullet(this.x+(this.width/2)+1,this.y+this.height-10,-0.3,-10,"#6e64ef",this.ctx,10,10,5));
-  // allBullets.push(new Bullet(this.x+(this.width/2),this.y+this.height-10,0,-10,"#93aeff",this.ctx,10,10,5));
-  // allBullets.push(new Bullet(this.x+(this.width/2)-1,this.y+this.height-10,0.3,-10,"#6e64ef",this.ctx,10,10,5));
-  // allBullets.push(new Bullet(this.x+(this.width/2)-2,this.y+this.height-10 ,0.5,-10,"#9664ef",this.ctx,10,10,5));
   allBullets.push(new Bullet(this.x+(this.width/2)+2,this.y+this.height-10,-0.5,-10,"#1bc9ee",this.ctx,10,10,5));//tur
   allBullets.push(new Bullet(this.x+(this.width/2)+1,this.y+this.height-10,-0.3,-10,"#6647f0",this.ctx,10,10,5));//purp
   allBullets.push(new Bullet(this.x+(this.width/2)+1,this.y+this.height-10,-0.2,-10,"#ff62b1",this.ctx,10,10,5));//pink

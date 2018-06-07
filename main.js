@@ -49,6 +49,59 @@ evilPink.src = "./images/monster-pink-150-150.png";
 
 var evilImages =[evilTurqouise,evilPurple,evilPink,evilPurpleLady];
 
+
+function drawStartFrame0(){
+  ctx.save();
+  ctx.clearRect(0,0,width,height);
+  ctx.fillStyle = "#ff62b1";
+  ctx.font = "200px Codystar";
+  ctx.fillText("Kawaii",200,400);
+  ctx.fillStyle = "#ff62b1";
+  ctx.font = "200px Codystar";
+  ctx.fillText("Fighter",100,600);
+  ctx.fillStyle = "yellow";
+  ctx.font = "40px Codystar";
+  ctx.fillText("幸運の小さな戦士",370,700);
+  ctx.restore();
+}
+
+function drawStartFrame1(){
+  ctx.save();
+  ctx.clearRect(0,0,width,height);
+  ctx.fillStyle = "#ff62b1";
+  ctx.font = "200px Codystar";
+  ctx.fillText("3",500,600);
+  ctx.fillStyle = "yellow";
+  ctx.font = "40px Codystar";
+  ctx.fillText("grab some candy",350,700);
+  ctx.restore();
+}
+
+function drawStartFrame2(){
+  ctx.save();
+  ctx.clearRect(0,0,width,height);
+  ctx.fillStyle = "#ff62b1";
+  ctx.font = "200px Codystar";
+  ctx.fillText("2",500,600);
+  ctx.fillStyle = "yellow";
+  ctx.font = "30px Codystar";
+  ctx.fillText("幸運の小さな戦士",420,700);
+  ctx.restore();
+}
+
+
+function drawStartFrame3(){
+  ctx.save();
+  ctx.clearRect(0,0,width,height);
+  ctx.fillStyle = "#ff62b1";
+  ctx.font = "200px Codystar";
+  ctx.fillText("1",500,600);
+  ctx.fillStyle = "yellow";
+  ctx.font = "40px Codystar";
+  ctx.fillText("plant a tree",400,700);
+  ctx.restore();
+}
+
 function drawBorder(){
   var lessFrames = Math.floor(frames%10/6); // gives 0 or 1
   if (lessFrames == 0) {
@@ -219,60 +272,84 @@ setInterval(function()
   ctx.clearRect(0,0,width,height);
   ctx.save(); 
   frames++;
-  drawBorder();
-  drawBullets(); 
-  moveBullets();
-  drawScore();
-  drawLives(); 
-  fighter.draw(ctx);
 
-  //draw ball, if we are still alive. 
-  if (fighter.lives>0) {
-    squareBall.draw();
-    squareBall.changePosition(playingField,canvas,fighter);
-    checkCollission1(squareBall);
 
-    while (evilsToCreate>0){
-        fighter.createEvils(evilImages,allEvils,playingField);
-        evilsToCreate--;
-    }
-      
-    drawEvils();
-    moveEvils();     
-    checkCollission2();
-    checkCollissionFighterEvil();
+  if (frames<120){
+    drawStartFrame0()
   }
 
-    if (fighter.lives === 0) {
-      ctx.clearRect(0,0,width,height);
-      ctx.fillStyle = "yellow";
-      ctx.font = "80px Codystar";
-      ctx.fillText("Game Over",250,300);
-      clearInterval(1); //stops the animation 
-    }
+  if (frames<240 && frames > 119){
+    drawStartFrame1()
+  }
+
+  if (frames<360 && frames > 240){
+    drawStartFrame2()
+  }
+
+  if (frames<480 && frames > 360){
+    drawStartFrame3()
+  }
   
 
-  ctx.save();
-},1000/60);
+  if (frames>480){
+
+    drawBorder();
+    drawBullets(); 
+    moveBullets();
+    drawScore();
+    drawLives(); 
+    fighter.draw(ctx);
+
+    //draw ball, if we are still alive. 
+    if (fighter.lives>0) {
+      squareBall.draw();
+      squareBall.changePosition(playingField,canvas,fighter);
+      checkCollission1(squareBall);
+
+      while (evilsToCreate>0){
+          fighter.createEvils(evilImages,allEvils,playingField);
+          evilsToCreate--;
+      }
+        
+      drawEvils();
+      moveEvils();     
+      checkCollission2();
+      checkCollissionFighterEvil();
+    }
+
+      if (fighter.lives === 0) {
+        ctx.clearRect(0,0,width,height);
+        ctx.fillStyle = "yellow";
+        ctx.font = "80px Codystar";
+        ctx.fillText("Game Over",250,300);
+        ctx.font = "40px Codystar";
+        ctx.fillText("refresh to play again",250,400);
+        clearInterval(1); //stops the animation 
+      }
+    }
+
+    ctx.save();
+  },1000/60);
 
 
 
-//fighter animation through keys 
+  //fighter animation through keys 
 
-document.onkeydown = function(e) {
-  switch (e.keyCode) {
-    case 39:
-      fighter.moveRight(playingField);
-      break;
-    
-    case 37:
-      fighter.moveLeft(playingField);
-      break;
+  document.onkeydown = function(e) {
+    switch (e.keyCode) {
+      case 39:
+        fighter.moveRight(playingField);
+        break;
+      
+      case 37:
+        fighter.moveLeft(playingField);
+        break;
 
-    case 32:
-      e.preventDefault();
-      fighter.createBullets(allBullets);
-      break;
-  }
-};
+      case 32:
+        e.preventDefault();
+        fighter.createBullets(allBullets);
+        break;
+    }
+  
+}
 
