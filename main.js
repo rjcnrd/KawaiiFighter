@@ -186,10 +186,12 @@ function checkCollission2(){
 }
 
 function checkCollissionFighterEvil(){
+ 
   var yCollissionTop = false;
   var xCollissionA = false ;
   var xCollissionB = false;
-  for (let e = 0; e < allEvils.length; e++) {
+
+  for (var e = allEvils.length-1; e >= 0; e-- ) {
     
     if((allEvils[e].y+ 75) >= (playingField.yMin-fighter.height)){
     yCollissionTop  = true};
@@ -199,59 +201,18 @@ function checkCollissionFighterEvil(){
     if(allEvils[e].x < (fighter.x + fighter.width) === true){
       xCollissionB = true};
   
-    if ((xCollissionA && xCollissionB) && yCollissionTop)
-    {
+    if (xCollissionA && xCollissionB && yCollissionTop){ 
       allEvils.splice(e,1);
-      console.log("Evil is Touching the Fighter");
-      fighter.lives -=1; 
+      fighter.lives-=1; 
       evilsToCreate++;
+      fighter.color ="yellow";
+      setTimeout(function(){fighter.color ="white";}, 500);
     };
+
     
   }
 
 };
-  //Check if fighter and monster collide ! 
-
-  
-//   for (var e = 0; e < allEvils.length; e++){
-
-//     var collissionFighterXAxisA = false; 
-//     var collissionFighterXAxisB = false; 
-//     var collissionFighterYAxis = false; 
-//     var countCollissionWithFighter = 0; 
-    
-//       if((allEvils[e].y+75) >= (playingField.yMin-fighter.height)){
-//         collissionFighterYAxis = true;
-//         console.log("collissionFighterYAxis",collissionFighterYAxis);
-//         };
-      
-//       if ((allEvils[e].x + 75 > fighter.x) === true){
-//           collissionFighterXAxisA  = true;
-//         };
-          
-//       if(allEvils[e].x < (fighter.x + fighter.width)=== true){
-//           collissionFighterXAxisB = true;
-//         };
-
-//       if( collissionFighterXAxisA && collissionFighterXAxisB && collissionFighterYAxis ){
-//         countCollissionWithFighter++;
-//         }
-//       }
-//     if (countCollissionWithFighter>0){
-//       fighter.color ="grey";
-//       fighter.lives -=1;
-//       countCollissionWithFighter--;
-//       allEvils.splice(e,1);
-//       e--;
-
-//       setTimeout(function(){fighter.color ="white";}, 500);
-//     }
-//     // for (var c = 0; c < countCollissionWithFighter; c++) {
-//     //   fighter.lives -=1;
-//     // }
-
-//   }
-// }
 
 setInterval(function()
 {
@@ -292,7 +253,7 @@ setInterval(function()
   
 
   ctx.save();
-},1000/20);
+},1000/60);
 
 
 
