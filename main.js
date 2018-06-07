@@ -36,16 +36,16 @@ var heart = new Image;
 heart.src = "images/Heart-Pink.png";
 
 var evilPurple = new Image;
-evilPurple.src = "images/monster-purple-150-150.png";
+evilPurple.src = "./images/monster-purple-150-150.png";
 
 var evilPurpleLady = new Image;
-evilPurpleLady.src = "images/monster-lady-purple-150-150.png";
+evilPurpleLady.src = "./images/monster-lady-purple-150-150.png";
 
 var evilTurqouise = new Image;
-evilTurqouise.src = "images/monster-turqouise-150-150.png";
+evilTurqouise.src = "./images/monster-turqouise-150-150.png";
 
 var evilPink = new Image;
-evilPink.src = "images/monster-pink-150-150.png";
+evilPink.src = "./images/monster-pink-150-150.png";
 
 var evilImages =[evilTurqouise,evilPurple,evilPink,evilPurpleLady];
 
