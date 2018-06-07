@@ -2,8 +2,9 @@ body {background: black;}
 
 #canvas {
 /* color used for border in pink #ff62b1 */
-  width:100%;
   background:black;
+  max-width: 90vw;
+  max-height: 90vh;
   
 }
 

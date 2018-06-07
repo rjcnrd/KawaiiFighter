@@ -33,11 +33,6 @@ var allEvils = []; // Collecting all the Evil Warriors
 //.................................
 //.................................
 
-var background1 = new Image;
-background1.src = "images/background-1.png";
-var background2 = new Image; 
-background2.src = "images/background-2.png";
-
 var heart = new Image;
 heart.src = "images/Heart-Pink.png";
 
