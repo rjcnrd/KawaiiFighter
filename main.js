@@ -5,19 +5,29 @@
 var canvas = document.getElementById("canvas");
 var ctx = document.getElementById("canvas").getContext("2d");
 
+var width =  1000;
+var height = 1200;
 //playingfield saves the maximum coordinates that objects can have without touching the game border. 
 var playingField = {
-  xMax: 948, //xmax Furthest most that objects can be without touching the frame
-  xMin:  52, //xmin
-  yMax: 50, //ymax
-  yMin: 540,//ymin
+  xMax: width-20, //xmax Furthest most that objects can be without touching the frame
+  xMin:  20, //xmin
+  yMax: 20, //ymax
+  yMin: height-20,//ymin
 };
 
-var width =  1000;
-var height = 600;
+
 
 var frames = 0;  //Frames is counting the amount of time the canvas was redrawn
 var evilCounter = 3; 
+
+//ANIMATED GAME ELEMENTS 
+//.................................
+//.................................
+
+var fighter = new Fighter(430,1145,80,80,0,0,"white",ctx);
+var squareBall = new SquareBall(250,250+600,4,-10,40,"#7FFFD4",ctx);
+var allBullets = []; //array will be filled with bullets 
+var allEvils = []; // Collecting all the Evil Warriors 
 
 //IMAGES
 //.................................
@@ -47,11 +57,40 @@ var evilImages =[evilTurqouise,evilPurple,evilPink,evilPurpleLady];
 
 //drawBorder() changes the background border every tenth frame (6 times in 60 frames)
 
+// function drawBorder(){
+//   var lessFrames = Math.floor(frames%10/6); // gives 0 or 1
+//   if (lessFrames == 0) {
+//     ctx.drawImage(background1,0,0);
+//   } else {ctx.drawImage(background2,0,0);}
+// }
+
 function drawBorder(){
   var lessFrames = Math.floor(frames%10/6); // gives 0 or 1
   if (lessFrames == 0) {
-    ctx.drawImage(background1,0,0);
-  } else {ctx.drawImage(background2,0,0);}
+    ctx.save();
+    ctx.beginPath();
+    ctx.strokeStyle="#ff62b1";
+    ctx.setLineDash([5,5]);
+    ctx.lineWidth=15;
+    // ctx.strokeRect(5,5,width-10,height-10);
+    ctx.strokeRect(0,0,width,height);
+    ctx.closePath();
+    ctx.restore();
+
+
+
+  } 
+  else {
+    ctx.save();
+    ctx.beginPath();
+    ctx.strokeStyle="#ff62b1";
+    ctx.setLineDash([20,15]);
+    ctx.lineWidth=15;
+    // ctx.strokeRect(5,5,width-10,height-10);
+    ctx.strokeRect(0,0,width,height);
+    ctx.closePath();
+    ctx.restore();
+  }
 }
 
 function drawBullets(){
@@ -83,19 +122,17 @@ function moveEvils(){
     allEvils[i].changePosition();
   }
 
-  allEvils = allEvils.filter(function(element){
-    return (element.y > playingField.yMax) //ymin = 540 
-    });
+// change counter when monster disappears on y axis 
+
+for (var i = 0; i < allEvils.length; i++) {
+  if (allEvils[i].y > playingField.yMin) {evilCounter++;}
 }
 
-//ANIMATED GAME ELEMENTS 
-//.................................
-//.................................
-
-var fighter = new Fighter(430,500,80,80,0,0,"white",ctx);
-var squareBall = new SquareBall(250,250,4,-10,40,"#7FFFD4",ctx);
-var allBullets = []; //array will be filled with bullets 
-var allEvils = []; // Collecting all the Evil Warriors 
+  allEvils = allEvils.filter(function(element){
+    return (element.y < playingField.yMin) //ymin = 540 
+    });
+  console.log("allEvils after filter",allEvils)
+}
 
 //checkCollission1() checks if fighter and squareBall meet 
 //yCollision checks if they collide on y axis
@@ -147,6 +184,7 @@ function checkCollission2(){
           
             if (collissionOnYAxis && collissionOnXAxis){
               allEvils.splice(e,1);
+              console.log("allEvils after collission",allEvils);
               allBullets.splice(b,5); 
               evilCounter++; 
               fighter.score +=50;}

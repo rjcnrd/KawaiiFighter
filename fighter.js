@@ -60,6 +60,6 @@ Fighter.prototype.createBullets = function () {
 
 Fighter.prototype.createEvils = function(images,allEvils,playingField){
   var selectImage = Math.floor(Math.random()*4);
-  var selectPosition = playingField.xMin + 75 + Math.floor(Math.random()*playingField.xMax);
+  var selectPosition = playingField.xMin + Math.floor(Math.random()*(playingField.xMax-playingField.xMin-75));
   allEvils.push(new Evil(selectPosition,50,0,2,0,images[selectImage],this.ctx));
 }       
