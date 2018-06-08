@@ -56,6 +56,7 @@ Fighter.prototype.createBullets = function () {
   allBullets.push(new Bullet(this.x+(this.width/2)-1,this.y+this.height-10,0.2,-10,"#ff62b1",this.ctx,10,10,5)); // pink 
   allBullets.push(new Bullet(this.x+(this.width/2)-1,this.y+this.height-10,0.3,-10,"#6647f0",this.ctx,10,10,5)); //purple
   allBullets.push(new Bullet(this.x+(this.width/2)-2,this.y+this.height-10 ,0.5,-10,"#1bc9ee",this.ctx,10,10,5));//tur
+  bulletShotSound.play(); 
 
   
 }

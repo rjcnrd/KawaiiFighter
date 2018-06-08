@@ -60,6 +60,7 @@ SquareBall.prototype.changePosition = function (playingField,canvas,fighter) {
     //check if ball is lost
 
     if(this.y > document.getElementById("canvas").height){
+      ballLostSound.play(); 
       fighter.lives -= 1;
       //shoot the ball back in if the fighter is still living! 
       if(fighter.lives>0){

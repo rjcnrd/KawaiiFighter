@@ -37,7 +37,17 @@ var allEvils = []; // Collecting all the Evil Warriors
 var nextLevelSound = new Audio;
 nextLevelSound.src = "./sounds/star_win_gain.mp3";
 var fighterHurtSound = new Audio; 
-fighterHurtSound.src = "./sounds/game_lose_negative.mp3";
+fighterHurtSound.src = "./sounds/game_lose_negative.mp3"; 
+var bulletShotSound = new Audio;
+bulletShotSound.src = "./sounds/Shooter-2.mp3";
+var gameOverSound = new Audio;
+gameOverSound.src = "./sounds/gameover.mp3";
+var pongSound = new Audio;
+pongSound.src = "./sounds/simple-pong.mp3";
+var ballLostSound = new Audio;
+ballLostSound.src = "./sounds/blip.mp3";
+var evilShotSound = new Audio; 
+evilShotSound.src = "./sounds/dead-evil1.mp3";
 
 //IMAGES
 //.................................
@@ -73,6 +83,7 @@ function drawStartFrame0(){
   ctx.fillStyle = "yellow";
   ctx.font = "40px Codystar";
   ctx.fillText("幸運の小さな戦士",370,700);
+  ctx.font = "80px Codystar";
   ctx.restore();
 }
 function drawStartFrame1(){
@@ -82,8 +93,8 @@ function drawStartFrame1(){
   ctx.font = "200px Codystar";
   ctx.fillText("3",500,600);
   ctx.fillStyle = "yellow";
-  ctx.font = "40px Codystar";
-  ctx.fillText("hug a stranger",350,700);
+  ctx.font = "80px Codystar";
+  ctx.fillText("[tab]: shoot",270,700);
   ctx.restore();
 }
 function drawStartFrame2(){
@@ -93,8 +104,9 @@ function drawStartFrame2(){
   ctx.font = "200px Codystar";
   ctx.fillText("2",500,600);
   ctx.fillStyle = "yellow";
-  ctx.font = "40px Codystar";
-  ctx.fillText("みんな大好き",420,700);
+  ctx.font = "80px Codystar";
+  ctx.fillText("[<-] move left",250,700);
+  ctx.fillText("[->] move right",250,800);
   ctx.restore();
 }
 function drawStartFrame3(){
@@ -102,10 +114,10 @@ function drawStartFrame3(){
   ctx.clearRect(0,0,width,height);
   ctx.fillStyle = "#ff62b1";
   ctx.font = "200px Codystar";
-  ctx.fillText("1",500,600);
+  ctx.fillText("1",500,600);  
   ctx.fillStyle = "yellow";
-  ctx.font = "40px Codystar";
-  ctx.fillText("plant a tree",400,700);
+  ctx.font = "80px Codystar";
+  ctx.fillText("みんな大好き",320,720);
   ctx.restore();
 }
 
@@ -243,6 +255,7 @@ function checkCollission1(squareBall) {
     // squareBall.y = squareBall.y;
     squareBall.vy *= -1;
     fighter.score +=10;
+    pongSound.play();
   };
 
 };
@@ -259,11 +272,10 @@ function checkCollission2(){
     for (let e = 0; e < allEvils.length; e++) {
       for (let b = 0; b < allBullets.length; b++) { 
           ColBulletEvilY = ((allEvils[e].y)+75  > allBullets[b].y);
-          // console.log("allEvils[e].y",allEvils[e].y,"allBullets[b].y", allBullets[b].y);
-      
           ColBulletEvilX = ( (allEvils[e].x <= allBullets[b].x) && (allEvils[e].x + 75 > allBullets[b].x));
-          
+
             if (ColBulletEvilY && ColBulletEvilX){
+              evilShotSound.play(); 
               allEvils.splice(e,1); //delete the evil that was shot 
               console.log("allEvils after collission",allEvils); 
               allBullets.splice(b,5); //delete the array of the 5 bullets used to shoot 
@@ -272,8 +284,6 @@ function checkCollission2(){
               // e--; //we took out one Evil, so the next one "moves up"
               // b--; //we took out one Bullet, so the next one "moves up"
             }
-          
-          
       }
     }
   }
@@ -295,11 +305,12 @@ function checkCollissionFighterEvil(){
     if(allEvils[e].x < (fighter.x + fighter.width) === true){
       xCollissionB = true};
   
-    if (xCollissionA && xCollissionB && yCollissionTop){ 
+    if (xCollissionA && xCollissionB && yCollissionTop){
       allEvils.splice(e,1);
       fighter.lives-=1; 
       evilsToCreate++;
       fighter.color ="yellow";
+      fighterHurtSound.play();
       setTimeout(function(){fighter.color ="white";}, 500);
     };
 
@@ -394,6 +405,7 @@ setInterval(function()
     }
 
       if (fighter.lives === 0) {
+        gameOverSound.play();
         ctx.clearRect(0,0,width,height);
         ctx.fillStyle = "yellow";
         ctx.font = "80px Codystar";
