@@ -4,11 +4,11 @@
 
 function SquareBall (startX = 0,startY = 0,startVX = 0,startVY = 0,side=10,color = "#7FFFD4",ctx,ax=0) 
 {  
-  this.side = side;
   this.x = startX;
   this.y = startY;
   this.vx = startVX;
   this.vy = startVY;
+  this.side = side;
   this.color = color;
   this.ctx = ctx; 
   this.ax= ax; 
@@ -66,10 +66,10 @@ SquareBall.prototype.changePosition = function (playingField,canvas,fighter) {
         var randomVx =  Math.floor(Math.random()*21)-10; //random start speed for the ball
         var randomVy =  Math.floor(Math.random()*21)-10; //random start speed for the ball  
         // this.color = ;
-        this.x = playingField.xMax/2;
-        this.y = (playingField.yMin-playingField.yMax)/2;     
-        this.vx = 5;
-        this.vy = 5;
+        this.x = playingField.xMax;
+        this.y = (playingField.yMax);     
+        this.vx = this.vx;
+        this.vy = this.vy;
       }
       console.log("fighter.live",fighter.lives);
     }

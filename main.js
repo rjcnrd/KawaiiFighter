@@ -18,6 +18,8 @@ var playingField = {
 
 var frames = 0;  //Frames is counting the amount of time the canvas was redrawn
 var evilsToCreate = 3; 
+var squareBallSpeedLevels = 3; // Enables increasing the speed step by step during setinterval 
+var musicToPlay = 3; 
 
 //ANIMATED GAME ELEMENTS 
 //.................................
@@ -27,6 +29,15 @@ var fighter = new Fighter(430,1145,80,80,0,0,"white",ctx);
 var squareBall = new SquareBall(250,250+600,4,-10,40,"#7FFFD4",ctx,0);
 var allBullets = []; //array will be filled with bullets 
 var allEvils = []; // Collecting all the Evil Warriors 
+
+//AUDIO
+//.................................
+//.................................
+
+var nextLevelSound = new Audio;
+nextLevelSound.src = "./sounds/star_win_gain.mp3";
+var fighterHurtSound = new Audio; 
+fighterHurtSound.src = "./sounds/game_lose_negative.mp3";
 
 //IMAGES
 //.................................
@@ -72,7 +83,7 @@ function drawStartFrame1(){
   ctx.fillText("3",500,600);
   ctx.fillStyle = "yellow";
   ctx.font = "40px Codystar";
-  ctx.fillText("grab some candy",350,700);
+  ctx.fillText("hug a stranger",350,700);
   ctx.restore();
 }
 function drawStartFrame2(){
@@ -82,8 +93,8 @@ function drawStartFrame2(){
   ctx.font = "200px Codystar";
   ctx.fillText("2",500,600);
   ctx.fillStyle = "yellow";
-  ctx.font = "30px Codystar";
-  ctx.fillText("幸運の小さな戦士",420,700);
+  ctx.font = "40px Codystar";
+  ctx.fillText("みんな大好き",420,700);
   ctx.restore();
 }
 function drawStartFrame3(){
@@ -303,6 +314,8 @@ setInterval(function()
   ctx.save(); 
   frames++;
 
+  //INTRO FRAMES 
+
 
   if (frames<120){
     drawStartFrame0()
@@ -320,6 +333,7 @@ setInterval(function()
     drawStartFrame3()
   }
   
+//GAME STARTS 
 
   if (frames>480){
   
@@ -342,9 +356,16 @@ setInterval(function()
 
       if(fighter.score>50){
 
-        if (fighter.score<200){
+        //EFFECTS 
+        if (fighter.score<100){
           drawRainbowBorder();
+          if (musicToPlay>2){
+            nextLevelSound.play();  
+            musicToPlay++;
+          }
         };
+
+        //INTRODUCING EVILS! 
 
         while (evilsToCreate>0){
           fighter.createEvils(evilImages,allEvils,playingField);
@@ -352,9 +373,15 @@ setInterval(function()
         };
 
         if(fighter.score>1500){
+          if(squareBallSpeedLevels>2){
+            squareBall.vx=squareBall.vx*2;
+            squareBallSpeedLevels--; 
+          }
+
 
           if (fighter.score<1550){
             drawRainbowBorder();
+            nextLevelSound.play();  
             };
        
         };
