@@ -20,6 +20,7 @@ var frames = 0;  //Frames is counting the amount of time the canvas was redrawn
 var evilsToCreate = 3; 
 var squareBallSpeedLevels = 3; // Enables increasing the speed step by step during setinterval 
 var musicToPlay = 3; 
+var boniToCreate = 3;
 
 //ANIMATED GAME ELEMENTS 
 //.................................
@@ -27,8 +28,9 @@ var musicToPlay = 3;
 
 var fighter = new Fighter(430,1145,80,80,0,0,"white",ctx);
 var squareBall = new SquareBall(250,250+600,4,-10,40,"#7FFFD4",ctx,0);
-var allBullets = []; //array will be filled with bullets 
+var allBullets = []; //Collecting all the Bullets 
 var allEvils = []; // Collecting all the Evil Warriors 
+var allBoni = []; //Collecting all the Bonuses 
 
 //AUDIO
 //.................................
@@ -36,18 +38,27 @@ var allEvils = []; // Collecting all the Evil Warriors
 
 var nextLevelSound = new Audio;
 nextLevelSound.src = "./sounds/star_win_gain.mp3";
+
 var fighterHurtSound = new Audio; 
 fighterHurtSound.src = "./sounds/game_lose_negative.mp3"; 
+
 var bulletShotSound = new Audio;
 bulletShotSound.src = "./sounds/Shooter-2.mp3";
+
 var gameOverSound = new Audio;
 gameOverSound.src = "./sounds/gameover.mp3";
+
 var pongSound = new Audio;
 pongSound.src = "./sounds/simple-pong.mp3";
+
 var ballLostSound = new Audio;
 ballLostSound.src = "./sounds/blip.mp3";
+
 var evilShotSound = new Audio; 
 evilShotSound.src = "./sounds/dead-evil1.mp3";
+
+var collectBonusSound = new Audio; 
+collectBonusSound.src = "./sounds/collectBonus.mp3"
 
 //IMAGES
 //.................................
@@ -70,6 +81,10 @@ evilPink.src = "./images/monster-pink-150-150.png";
 
 var evilImages =[evilTurqouise,evilPurple,evilPink,evilPurpleLady];
 
+var star = new Image;
+star.src = "./images/YellowStar.png";
+
+var bonusImages = [star,star,star,star];
 
 function drawStartFrame0(){
   ctx.save();
@@ -180,23 +195,6 @@ function drawRainbowBorder(){
   }
 }
 
-function drawBullets(){
-  for (var i = 0; i < allBullets.length; i++) {
-    allBullets[i].draw();
-  }
-  
-}
-
-//filter out the bullets that are still visible and change their position)
-function moveBullets(){
-  for (var i = 0; i < allBullets.length; i++) {
-    allBullets[i].changePosition(playingField);
-  }
-  allBullets = allBullets.filter(function(element){
-  return (element.y > playingField.yMax && element.x > playingField.xMin && element.x < playingField.xMax ) //ymin = 540 
-  });
-}
-
 function drawScore(){
   ctx.fillStyle = "white";
   ctx.font = "50px Codystar";
@@ -208,6 +206,23 @@ function drawLives(){
   ctx.drawImage(heart,640+index*80,20);};
 };
 
+//BULLETS 
+
+function drawBullets(){
+  for (var i = 0; i < allBullets.length; i++) {
+    allBullets[i].draw();
+  }
+}
+
+//filter out the bullets that are still visible and change their position)
+function moveBullets(){
+  for (var i = 0; i < allBullets.length; i++) {
+    allBullets[i].changePosition(playingField);
+  }
+  allBullets = allBullets.filter(function(element){
+  return (element.y > playingField.yMax && element.x > playingField.xMin && element.x < playingField.xMax ) //ymin = 540 
+  });
+}
 
 function drawEvils(){
   for (var i = 0; i < allEvils.length; i++) {
@@ -230,12 +245,32 @@ function moveEvils(){
     // console.log("allEvils after filter",allEvils)
 }
 
-//checkCollission1() checks if fighter and squareBall meet 
+function drawBoni(){
+  for (var i = 0; i < allBoni.length; i++) {
+  allBoni[i].draw();
+  }
+}
+//moveEvils moves the Evils and removes them from the array if they leave the playing field. 
+//When Evil leaves the y Axis, EvilsToCreate is set +1 
+function moveBoni(){
+  for (var i = 0; i < allBoni.length; i++) {
+    allBoni[i].changePosition();
+    if ((allBoni[i].y +75)> playingField.yMin){
+    boniToCreate++;
+  }
+}
+
+  allBoni = allBoni.filter(function(element){
+    return (element.y +75 < playingField.yMin) 
+  });
+}
+
+//checkCollissionFighterSquareBall() checks if fighter and squareBall meet 
 //yCollision checks if they collide on y axis
 //xCollissionA checks if the edge of the squareBall is right of the left outer edge of the fighter
 //xCollisionB checks the same for the right edge of the fighter
 
-function checkCollission1(squareBall) {
+function checkCollissionFighterSquareBall(squareBall) {
   var yCollissionTop = false;
   var xCollissionA = false ;
   var xCollissionB = false;
@@ -260,10 +295,10 @@ function checkCollission1(squareBall) {
 
 };
 
-//checkCollission2 checks if ONE Bullet b part of allBullets 
+//checkCollissionFighterBullet checks if ONE Bullet b part of allBullets 
 //collides with ONE Evil e part of allEvils 
 
-function checkCollission2(){
+function checkCollissionFighterBullet(){
   if(allEvils.length>0){
     var ColBulletEvilY = false;
     var ColBulletEvilX = false;
@@ -319,6 +354,41 @@ function checkCollissionFighterEvil(){
 
 };
 
+function checkCollissionFighterBonus(){
+  var yCollissionTop = false;
+  var xCollissionA = false ;
+  var xCollissionB = false;
+
+  for (var e = allBoni.length-1; e >= 0; e-- ) {
+    
+    if((allBoni[e].y+ 75) >= (playingField.yMin-fighter.height)){
+    yCollissionTop  = true};
+  
+    if ((allBoni[e].x + 75 > fighter.x) === true){
+      xCollissionA = true};
+    if(allBoni[e].x < (fighter.x + fighter.width) === true){
+      xCollissionB = true};
+  
+    if (xCollissionA && xCollissionB && yCollissionTop){
+      allBoni.splice(e,1);
+      fighter.score+=30; 
+      collectBonusSound.play();
+      boniToCreate++;
+      fighter.color ="#ff62b1";
+      fighter.width=200; 
+      //new sound 
+      setTimeout(function(){
+      fighter.color ="white";
+      fighter.width=140;
+      }, 500);
+    };
+
+    
+  }
+
+
+}
+
 setInterval(function()
 {
   ctx.clearRect(0,0,width,height);
@@ -363,7 +433,17 @@ setInterval(function()
 
       squareBall.draw();
       squareBall.changePosition(playingField,canvas,fighter);
-      checkCollission1(squareBall);
+      checkCollissionFighterSquareBall(squareBall);
+
+      //INTRODUCING BONUS
+      while (boniToCreate>0){
+      fighter.createBonus(bonusImages,allBoni,playingField);
+      boniToCreate--;
+       };
+
+      drawBoni();
+      moveBoni(); 
+      checkCollissionFighterBonus();
 
       if(fighter.score>50){
 
@@ -399,12 +479,12 @@ setInterval(function()
 
         drawEvils();
         moveEvils();     
-        checkCollission2();
+        checkCollissionFighterBullet();
         checkCollissionFighterEvil();
       } 
     }
 
-      if (fighter.lives === 0) {
+      if (fighter.lives <= 0) {
         gameOverSound.play();
         ctx.clearRect(0,0,width,height);
         ctx.fillStyle = "yellow";
@@ -424,6 +504,7 @@ setInterval(function()
   //fighter animation through keys 
 
   document.onkeydown = function(e) {
+    e.preventDefault();
     switch (e.keyCode) {
       case 39:
         fighter.moveRight(playingField);
@@ -434,7 +515,6 @@ setInterval(function()
         break;
 
       case 32:
-        e.preventDefault();
         fighter.createBullets(allBullets);
         break;
     }

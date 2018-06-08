@@ -66,3 +66,9 @@ Fighter.prototype.createEvils = function(images,allEvils,playingField){
   var selectPosition = playingField.xMin + Math.floor(Math.random()*(playingField.xMax-playingField.xMin-75));
   allEvils.push(new Evil(selectPosition,50,0,2,0,images[selectImage],this.ctx));
 }       
+
+Fighter.prototype.createBonus = function(images,allBonuses,playingField){
+  var selectImage = Math.floor(Math.random()*4); //4 needs to be adapted to amount of images 
+  var selectPosition = playingField.xMin + Math.floor(Math.random()*(playingField.xMax-playingField.xMin-75));
+  allBoni.push(new Bonus(selectPosition,50,0,1,0,images[selectImage],this.ctx));
+}     
