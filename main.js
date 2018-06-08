@@ -20,7 +20,7 @@ var frames = 0;  //Frames is counting the amount of time the canvas was redrawn
 var evilsToCreate = 3; 
 var squareBallSpeedLevels = 3; // Enables increasing the speed step by step during setinterval 
 var musicToPlay = 3; 
-var boniToCreate = 3;
+var boniToCreate = 2;
 
 //ANIMATED GAME ELEMENTS 
 //.................................
@@ -82,7 +82,7 @@ evilPink.src = "./images/monster-pink-150-150.png";
 var evilImages =[evilTurqouise,evilPurple,evilPink,evilPurpleLady];
 
 var star = new Image;
-star.src = "./images/YellowStar.png";
+star.src = "./images/YellowStar2.png";
 
 var bonusImages = [star,star,star,star];
 
@@ -231,6 +231,7 @@ function drawEvils(){
 }
 //moveEvils moves the Evils and removes them from the array if they leave the playing field. 
 //When Evil leaves the y Axis, EvilsToCreate is set +1 
+
 function moveEvils(){
   for (var i = 0; i < allEvils.length; i++) {
     allEvils[i].changePosition();
@@ -252,16 +253,17 @@ function drawBoni(){
 }
 //moveEvils moves the Evils and removes them from the array if they leave the playing field. 
 //When Evil leaves the y Axis, EvilsToCreate is set +1 
+
 function moveBoni(){
   for (var i = 0; i < allBoni.length; i++) {
     allBoni[i].changePosition();
-    if ((allBoni[i].y +75)> playingField.yMin){
+    if ((allBoni[i].y) > playingField.yMin){
     boniToCreate++;
   }
 }
 
   allBoni = allBoni.filter(function(element){
-    return (element.y +75 < playingField.yMin) 
+    return (element.y < playingField.yMin) 
   });
 }
 
@@ -441,10 +443,6 @@ setInterval(function()
       boniToCreate--;
        };
 
-      drawBoni();
-      moveBoni(); 
-      checkCollissionFighterBonus();
-
       if(fighter.score>50){
 
         //EFFECTS 
@@ -477,15 +475,20 @@ setInterval(function()
        
         };
 
-        drawEvils();
-        moveEvils();     
-        checkCollissionFighterBullet();
-        checkCollissionFighterEvil();
+        
       } 
+      drawBoni();
+      moveBoni(); 
+      checkCollissionFighterBonus();
+
+      drawEvils();
+      moveEvils();     
+      checkCollissionFighterBullet();
+      checkCollissionFighterEvil();
     }
 
       if (fighter.lives <= 0) {
-        gameOverSound.play();
+        // gameOverSound.play();
         ctx.clearRect(0,0,width,height);
         ctx.fillStyle = "yellow";
         ctx.font = "80px Codystar";

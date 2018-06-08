@@ -23,6 +23,6 @@ Bonus.prototype.draw = function () {
 Bonus.prototype.changePosition = function () {
 
   this.x += this.vx;
-  this.y += (this.vy + this.ay); 
+  this.y += this.vy; 
    
 }
