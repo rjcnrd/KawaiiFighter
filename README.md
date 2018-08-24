@@ -1,7 +1,6 @@
-# Kawaii Fighter
-80ies-style browser-based single player game. [Play it here](https://github.com/rjcnrd/KawaiiFighter/blob/master/images/KawaiiFighterLogo.png)
-
 ![ScreenShot](https://github.com/rjcnrd/KawaiiFighter/blob/master/images/KawaiiFighterLogo.png)
+# Kawaii Fighter
+80ies-style browser-based single player game. [Play it!](https://github.com/rjcnrd/KawaiiFighter/blob/master/images/KawaiiFighterLogo.png)
 
 ### Introduction
 
