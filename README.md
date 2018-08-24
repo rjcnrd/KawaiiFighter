@@ -1,15 +1,11 @@
 # Kawaii Fighter
 80ies-style browser-based single player game. [Play it here](https://github.com/rjcnrd/KawaiiFighter/blob/master/images/KawaiiFighterLogo.png)
 
-![ScreenShot](https://github.com/rjcnrd/KawaiiFighter/blob/master/images/PreviewIcon.png)
+![ScreenShot](https://github.com/rjcnrd/KawaiiFighter/blob/master/images/KawaiiFighterLogo.png)
 
 ### Introduction
 
 Kawaii Fighter is a simple game in JS. Kawaii is Japanese for cute and the game Kawaii Fighter is a play on contemporary retro design with elements of pop culture - such as rainbow colored bullets.
-
-### Screenshot of the Game
-
-![ScreenShot](https://github.com/rjcnrd/KawaiiFighter/blob/master/images/Screenshot.png)
 
 ### Motivation
 
@@ -25,4 +21,6 @@ My first web project after two weeks of web dev experience. My goal was to build
 
 HTML - Canvas, Javascript. 
 
+### Preview of the Game 
+![ScreenShot](https://github.com/rjcnrd/KawaiiFighter/blob/master/images/Screenshot.png)
 
