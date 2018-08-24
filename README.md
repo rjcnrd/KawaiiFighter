@@ -4,7 +4,7 @@
 
 ### Introduction
 
-Kawaii Fighter is a simple game in JS. Kawaii is Japanese for cute and the game Kawaii Fighter is a play on contemporary retro design with elements of pop culture - such as rainbow colored bullets.
+Kawaii Fighter is a simple game in JS. "Kawaii" means "cute" in Japanese - the game Kawaii Fighter is a play on contemporary retro design with elements of pop culture, such as rainbow colored bullets.
 
 ### Motivation
 
