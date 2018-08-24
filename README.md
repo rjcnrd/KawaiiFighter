@@ -7,9 +7,21 @@
 
 ## Introduction
 
+Kawaii Fighter is a simple game in JS. Kawaii is Japanese for cute and the game Kawaii Fighter is a play on contemporary retro design with elements of pop culture - such as rainbow colored bullets. 
+
 ### Motivation
 
-### Main features
+First try to build a game after two weeks of web development experience. My goal was to build a game that uses object oriented programming with JS and canvas, including intuitive design and user interaction. 
 
-### Outlook
+
+### Features
+
+* multiple levels based on score threshholds 
+* all images created by myself in pixelart style 
+* 8 bit sound effects 
+
+###Tech/framework used
+
+HTML - Canvas, Javascript. 
+
 
